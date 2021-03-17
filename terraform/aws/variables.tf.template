@@ -1,0 +1,53 @@
+variable "aws_region" {
+  default = "us-east-2"
+}
+
+variable "instance_ami" {
+  default =  "ami-0dd9f0e7df0f0a138"
+}
+
+variable "vm_name" {
+  type    = list(string)
+  default = ["CNB_NODE_NAME"]
+}
+
+variable "instance_type" {
+  type    = list(string)
+  default = ["CNB_NODE_TYPE"]
+}
+
+variable "vm_key" {
+  default = "ansible_aws_key"
+}
+
+# For ubuntu VM, user name is ubuntu
+variable "vm_user" {
+  default = "ubuntu"
+}
+
+variable "vm_volume" {
+  default = "50"
+}
+
+variable "vpc_name" {
+  default = "TerraformVPCAnsible"
+}
+
+variable "vpc_cidr" {
+  default = "10.0.0.0/16"
+}
+
+variable "subnets_cidr" {
+  type    = list(string)
+  default = ["10.0.0.0/24"]
+}
+
+variable "ingress_cidr" {
+  default = "192.55.0.0/16"
+}
+
+variable "aws_zones" {
+  type    = list(string)
+  default = ["us-east-2a"]
+}
+

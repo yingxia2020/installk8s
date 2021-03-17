@@ -1,0 +1,17 @@
+---
+- name: Install CNB run software dependencies
+  hosts: localhost
+  gather_facts: no
+  become: yes
+
+  tasks:
+  - name: Install terraform
+    unarchive:
+      src: https://releases.hashicorp.com/terraform/0.13.5/terraform_0.13.5_linux_amd64.zip
+      dest: /usr/local/bin
+      remote_src: True
+
+  - name: Install jq
+    package:
+      name: jq
+      state: present

@@ -1,0 +1,47 @@
+- name: Install k8s cluster 
+  hosts: all
+  gather_facts: no
+  vars:
+    package: install_k8s
+
+  tasks:
+  - name: Copy install k8s package
+    copy:
+      src: "{{ cdir }}/{{ package }}.tar.gz"
+      dest: /home/{{ user }}
+
+  - name: Untar install k8s package
+    shell: |
+      cd /home/{{ user }}
+      tar xfz {{ package }}.tar.gz
+
+  - name: Copy SSH key file to remote
+    copy:
+      src: /home/{{ luser }}/.ssh/id_rsa
+      dest: /home/{{ user }}/.ssh
+      mode: 0600
+
+  - name: Copy cluster_config.json to remote 
+    copy:
+      src: "{{ cdir }}/cluster_config.json"
+      dest: /home/{{ user }}/installation
+
+  - name: Prepare install k8s cluster
+    command: ./prepare-cluster-CSP.sh
+    args:
+      chdir: /home/{{ user }}/installation
+    become: true
+
+  - name: Install k8s cluster
+    command: /usr/local/bin/ansible-playbook -i inventory/cnb-cluster/inventory.yaml --become --become-user=root cluster.yml
+    args:
+      chdir: /home/{{ user }}/installation/kubespray
+    become: true
+    become_user: "{{ user }}"
+
+  - name: Copy k8s config file
+    shell: |
+      mkdir /home/{{ user }}/.kube
+      cp /etc/kubernetes/admin.conf /home/{{ user }}/.kube/config
+      chown -R {{ user }} /home/{{ user }}/.kube
+    become: true

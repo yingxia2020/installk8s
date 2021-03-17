@@ -1,0 +1,15 @@
+0. adduser gcpuser(azureuser and awsuser)
+1. create $HOME/ansible directory, put the contents inside that directory
+2. For GCP, also need set GOOGLE_APPLICATION_CREDENTIALS and put credential file under terraform directory
+For example: credential file is CNB-GCP-123456.json
+  # put this file under $HOME/ansible/terraform/gcp
+  # change the variables.tf.template file under $HOME/ansible/terraform/gcp, cred_file field to your credential file name
+  # Add in $HOME/.bashrc file: export GOOGLE_APPLICATION_CREDENTIALS="/home/gcpuser/ansible/terraform/gcp/CNB-GCP-123456.json"
+  # source .bashrc
+3. run setup.sh to set up software dependencies
+4. gcloud init or az login or aws configure
+5. ./install_cluster.sh n2-standard-8 2 (gcp|azure|aws) ( or Standard_D16ds_v4 or m5.4xlarge )
+6. ./remove_cluster.sh (gcp|azure|aws)
+
+Note: aws vm username is ubuntu
+      gcp and azure user name are gcpuser and azureuser

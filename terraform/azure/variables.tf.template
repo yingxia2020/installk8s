@@ -1,0 +1,48 @@
+variable "rg_name" {
+  description = "Name of resource group"
+  default     = "CNBTerraformAnsible"
+}
+
+variable "location" {
+  description = "Region to build into"
+  default     = "eastus"
+}
+
+variable "vm_name" {
+  description = "Name of the VMs"
+  type        = list(string)
+  default     = ["CNB_NODE_NAME"]
+}
+
+variable "vm_size" {
+  description = "Size of the VMs"
+  type        = list(string)
+  default     = ["CNB_NODE_TYPE"]
+}
+
+variable "storage_type" {
+  description = "VM storage type"
+  # D16a_v4 use Standard_LRS, D16as_v4 use Premium_LRS
+  default = "Standard_LRS"
+}
+
+variable "disk_size" {
+  description = "OS disk size in GB"
+  default     = 50
+}
+
+variable "vm_sshkeyfile" {
+  description = "SSH key file location"
+  default     = "~/.ssh/id_rsa.pub"
+}
+
+variable "username" {
+  description = "user name to create VM"
+  default     = "azureuser"
+}
+
+# optional for enable password authentication mode only
+variable "password" {
+  description = "admin user password, upper, lower case char and number"
+  default     = "Testxprt123"
+}

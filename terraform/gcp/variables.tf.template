@@ -1,0 +1,41 @@
+variable "vm_name" {
+  description = "Name of the VMs"
+  type        = list(string)
+  default     = ["CNB_NODE_NAME"]
+}
+
+variable "vm_size" {
+  description = "Size of the VMs"
+  type        = list(string)
+  default     = ["CNB_NODE_TYPE"]
+}
+
+variable "disk_size" {
+  description = "VM disk size in GB"
+  default     = 50
+}
+
+variable "location" {
+  description = "Region to build into"
+  default     = "us-east1-c"
+}
+
+variable "region_name" {
+  default = "us-east1"
+}
+
+variable "project_name" {
+  default = "cnb-gcp-10677667"
+}
+
+variable "user_name" {
+  default = "gcpuser"
+}
+
+variable "cred_file" {
+  default = "CNB-GCP-c2aebb94e8b2.json"
+}
+
+variable "ssh_keys" {
+  default = "~/.ssh/id_rsa.pub"
+}

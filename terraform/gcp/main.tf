@@ -28,18 +28,68 @@ resource "google_compute_instance" "mynode" {
   }
 
   metadata = {
-    ssh-keys = "var.user_name:${file(var.ssh_keys)}"
+    ssh-keys = "${var.user_name}:${file(var.ssh_keys)}"
   }
 
   network_interface {
     # A default network is created for all GCP projects
-    network = "default"
-    # subnetwork = google_compute_subnetwork.private_subnet.name
+    # network = "default"
+    subnetwork = google_compute_subnetwork.subnet_public.name
 
     access_config {
       // Include this section to give the VM an external ip address
     }
   }
+}
+
+resource "google_compute_network" "vpc" {
+  name                    = "${var.proj_name}-vpc"
+  auto_create_subnetworks = "false"
+}
+
+resource "google_compute_subnetwork" "subnet_public" {
+  name = "${var.proj_name}-subnet"
+  ip_cidr_range = var.subnet_cidr
+  network = "${var.proj_name}-vpc"
+  depends_on    = [google_compute_network.vpc]
+  region      = var.region_name
+}
+
+resource "google_compute_firewall" "firewall_public" {
+  name    = "${var.proj_name}-firewall-public"
+  network = google_compute_network.vpc.name
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = [var.ingress_cidr]
+}
+
+resource "google_compute_firewall" "firewall_private" {
+  name    = "${var.proj_name}-firewall-private"
+  network = google_compute_network.vpc.name
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "tcp"
+    ports    = ["1-65535"]
+  }
+
+  allow {
+    protocol = "udp"
+    ports    = ["1-65535"]
+  }
+
+  source_ranges = [var.subnet_cidr]
 }
 
 output "instance_ip_addresses" {
@@ -48,4 +98,3 @@ output "instance_ip_addresses" {
     instance.name => [instance.network_interface.0.access_config.0.nat_ip, instance.network_interface.0.network_ip]
   }
 }
-

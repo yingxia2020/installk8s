@@ -33,9 +33,21 @@ variable "user_name" {
 }
 
 variable "cred_file" {
-  default = "CNB-GCP-c2aebb94e8b2.json"
+  default = "CNB-GCP-c2aebb9xxxxx.json"
 }
 
 variable "ssh_keys" {
   default = "~/.ssh/id_rsa.pub"
+}
+
+variable "ingress_cidr" {
+  default = "134.134.0.0/16"
+}
+
+variable "subnet_cidr" {
+  default = "10.130.0.0/20"
+}
+
+variable "proj_name" {
+  default = "cnb-test"
 }
